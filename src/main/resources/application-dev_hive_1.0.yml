@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    # Hive jdbc driver 1.X.X 与 HikariCP不兼容，所以换成dbcp
+    type: org.apache.commons.dbcp.BasicDataSource
+    driver-class-name: org.apache.hive.jdbc.HiveDriver
+    url: jdbc:hive2://10.18.100.116:10000/rkjk
+    username:
+    password:
+    dbcp2:
+      initial-size: 5
+      max-total: 20
+      max-idle: 30000
+
+hbase:
+  zk-hosts: 10.18.100.173,10.18.100.116,10.18.100.174
+  zk-port: 2181

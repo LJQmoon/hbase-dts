@@ -1,0 +1,30 @@
+{
+    "source":{
+        "sql":"SELECT * FROM rkjk.bg_ssjlbg ",
+        "args":[]
+    },
+    "sink":{
+        "hbase":{
+            "table_name":"HIS_PLATFORM:bg_ssjlbg_hbase",
+            "familys":[
+                {
+                    "family_name":"MAJOR",
+                    "block_size":"16384",
+                    "columns":[
+                   "yljgdm","ssmxlsh","jzlsh","kh","klx","zjhm","zjlx"
+                    ]
+                }
+            ],
+            "default_family":{
+                "family_name":"MINOR",
+                "block_size":"65536"
+            },
+            "row_key":{
+                "pattern":"?_?_?",
+                "args":[
+                    "yljgdm","jzlsh","{random_char:6}"
+                ]
+            }
+        }
+    }
+}
