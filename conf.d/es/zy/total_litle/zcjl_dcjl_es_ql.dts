@@ -1,0 +1,36 @@
+{
+    "source":{
+        "sql":"select concat_ws(\"_\",t.jzlsh,t.yljgdm) as fkey,t.* from rkjk.zcjl_dcjl t",
+        "args":[]
+    },
+    "sink":{
+        "elasticsearch":{
+            "hosts":[
+                {
+                    "hostname":"10.110.14.126",
+                    "port":8083
+                },{
+                    "hostname":"10.110.14.127",
+                    "port":8083
+                },{
+                    "hostname":"10.110.14.128",
+                    "port":8083
+                },{
+                    "hostname":"10.110.14.129",
+                    "port":8083
+                },{
+                    "hostname":"10.110.14.130",
+                    "port":8083
+                }
+            ],
+            "index":"gsww_zcjl_dcjl",
+            "type":"zy",
+            "id":{
+                "pattern":"?_?",
+                "args":[
+                    "JZLSH","YLJGDM"
+                ]
+            }
+        }
+    }
+}
