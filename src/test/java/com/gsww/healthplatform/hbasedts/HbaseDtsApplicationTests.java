@@ -11,6 +11,7 @@ public class HbaseDtsApplicationTests {
 
     @Test
     public void contextLoads() {
+
     }
 
 }

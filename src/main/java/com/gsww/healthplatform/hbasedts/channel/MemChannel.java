@@ -13,8 +13,8 @@ import com.gsww.healthplatform.hbasedts.arch.Event;
 import com.gsww.healthplatform.hbasedts.arch.lifecycle.AbstractLifecycle;
 import com.gsww.healthplatform.hbasedts.arch.lifecycle.LifecycleState;
 
-import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MemChannel extends AbstractLifecycle implements Channel {
     private Queue<Event> eventQueue;
@@ -22,7 +22,7 @@ public class MemChannel extends AbstractLifecycle implements Channel {
 
     public MemChannel() {
         state = LifecycleState.IDLE;
-        eventQueue = new LinkedList<Event>();
+        eventQueue = new ConcurrentLinkedQueue<>();
     }
 
     public MemChannel(int bufferSize) {
@@ -62,7 +62,6 @@ public class MemChannel extends AbstractLifecycle implements Channel {
 
     @Override
     public void stop() {
-        eventQueue.clear();
         super.stop();
     }
 }

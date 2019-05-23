@@ -48,7 +48,7 @@ public class HBaseAdmin {
 //    }
 
     // HBase client version 1.2.0
-    public void createTable(String tableName, HFamilyDesc[] familys) throws IOException {
+    public void createTable(String tableName, HFamilyDesc[] familys, byte[][] splitKeys) throws IOException {
         try (Admin admin = hbaseConnection.getAdmin()) {
 //            if (admin.tableExists(TableName.valueOf(tableName))) {
 //                throw new TableExistsException(tableName);
@@ -58,7 +58,7 @@ public class HBaseAdmin {
             for (HFamilyDesc family : familys) {
                 table.addFamily(new HColumnDescriptor(Bytes.toBytes(family.getFamilyName())).setBlocksize(family.getBlockSize()));
             }
-            admin.createTable(table);
+            admin.createTable(table, splitKeys);
         }
     }
 

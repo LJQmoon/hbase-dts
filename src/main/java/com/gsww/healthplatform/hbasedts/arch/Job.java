@@ -12,5 +12,4 @@ import com.gsww.healthplatform.hbasedts.arch.lifecycle.Lifecycle;
 
 public interface Job extends Lifecycle {
     String getId();
-    void execute();
 }

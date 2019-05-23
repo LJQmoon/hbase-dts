@@ -87,7 +87,7 @@ public class InnerFunction {
         return result.toString();
     }
 
-    /*
+
     public static void main(String[] args) {
         System.out.println(execute("timestamp"));
         System.out.println(execute("long_timestamp"));
@@ -95,5 +95,5 @@ public class InnerFunction {
         System.out.println(execute("date:yyyyMMddHHmmss"));
         System.out.println(execute("last_date"));
         System.out.println(execute("random_char:8"));
-    }*/
+    }
 }

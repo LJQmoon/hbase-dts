@@ -2,7 +2,8 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@10.18.100.240:1521/qyws_empi
+#    url: jdbc:oracle:thin:@10.18.100.240:1521/qyws_empi
+    url: jdbc:oracle:thin:@10.40.6.15:1521/qyws_empi
     username: qyws_empi
     password: qyws_empi
     hikari:
@@ -13,5 +14,6 @@ spring:
       connection-timeout: 10000
 
 hbase:
-  zk-hosts: 10.18.100.173,10.18.100.116,10.18.100.174
+#  zk-hosts: 10.18.100.173,10.18.100.116,10.18.100.174
+  zk-hosts: 10.40.33.11,10.40.33.12,10.40.33.18,10.40.33.19,10.40.33.20
   zk-port: 2181

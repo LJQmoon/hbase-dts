@@ -14,7 +14,8 @@ import com.gsww.healthplatform.hbasedts.arch.Event;
 import com.gsww.healthplatform.hbasedts.arch.Source;
 import com.gsww.healthplatform.hbasedts.arch.lifecycle.AbstractLifecycle;
 import com.gsww.healthplatform.hbasedts.arch.lifecycle.LifecycleState;
-import com.gsww.healthplatform.hbasedts.job.InnerFunction.InnerFunction;
+import com.gsww.healthplatform.hbasedts.utils.InnerFunction;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -33,7 +34,7 @@ public class JdbcSource extends AbstractLifecycle implements Source, Runnable {
     private static final Logger logger = LoggerFactory.getLogger(JdbcSource.class);
     private String sql;
     private List<String> args;
-    private List<String> columns;
+    private List<Pair<String, String>> columns;
     private Channel channel;
 
     private JdbcTemplate jdbcTemplate;
@@ -64,9 +65,10 @@ public class JdbcSource extends AbstractLifecycle implements Source, Runnable {
                 @Override
                 public Object extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                     ResultSetMetaData metaData = resultSet.getMetaData();
-                    List<String> columns = new ArrayList<>(metaData.getColumnCount());
+                    List<Pair<String, String>> columns = new ArrayList<>(metaData.getColumnCount());
                     for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                        columns.add(metaData.getColumnName(i));
+                        String columnName = metaData.getColumnName(i);
+                        columns.add(new Pair<>(columnName, filterColumnName(columnName)));
                     }
                     JdbcSource.this.columns = columns;
 
@@ -81,18 +83,27 @@ public class JdbcSource extends AbstractLifecycle implements Source, Runnable {
                 }
             });
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(String.format("Query sql(%s) failure", sql), e);
             stop();
             return;
         }
     }
 
+    // Hive字段名默认为“表名.字段名”，使用此方法过滤其中的表名
+    private final static String filterColumnName(String columnName) {
+        int index = columnName.lastIndexOf('.');
+        if (index >= 0) {
+            return columnName.substring(index+1).toLowerCase();
+        }
+        return columnName.toLowerCase();
+    }
+
     private Map<String, Object> readRow(ResultSet resultSet) throws SQLException {
         Map<String, Object> result = new HashMap<>(columns.size());
-        for (String column : columns) {
-            Object value = resultSet.getObject(column);
+        for (Pair<String, String> column : columns) {
+            Object value = resultSet.getObject(column.getKey());
             if (value != null) {
-                result.put(column, value);
+                result.put(column.getValue(), value);
             }
         }
         return result;

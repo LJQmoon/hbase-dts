@@ -13,6 +13,7 @@ import com.google.gson.stream.JsonReader;
 import com.gsww.healthplatform.hbasedts.arch.Job;
 import com.gsww.healthplatform.hbasedts.arch.Sink;
 import com.gsww.healthplatform.hbasedts.arch.Source;
+import com.gsww.healthplatform.hbasedts.elasticsearch.sink.ElasticsearchSinkLoader;
 import com.gsww.healthplatform.hbasedts.hbase.sink.HBaseSinkLoader;
 import com.gsww.healthplatform.hbasedts.jdbc.source.JdbcSource;
 import com.gsww.healthplatform.hbasedts.hbase.sink.HBaseSink;
@@ -80,8 +81,10 @@ public class JobLoader {
         reader.beginObject();
         while (reader.hasNext()) {
             String key = reader.nextName();
-            if (key.equals("hbase")) {
+            if (key.equals(HBaseSinkLoader.JSON_NAME)) {
                 return hBaseSinkLoader.load(reader);
+            } else if (key.equals(ElasticsearchSinkLoader.JSON_NAME)) {
+                return ElasticsearchSinkLoader.load(reader);
             } else {
                 reader.skipValue();
             }

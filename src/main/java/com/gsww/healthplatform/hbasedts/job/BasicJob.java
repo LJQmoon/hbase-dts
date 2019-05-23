@@ -17,8 +17,11 @@ import com.gsww.healthplatform.hbasedts.arch.lifecycle.AbstractLifecycle;
 import com.gsww.healthplatform.hbasedts.arch.lifecycle.LifecycleState;
 import com.gsww.healthplatform.hbasedts.arch.lifecycle.LifecycleUtils;
 import com.gsww.healthplatform.hbasedts.channel.MemChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BasicJob extends AbstractLifecycle implements Job {
+    private static final Logger logger = LoggerFactory.getLogger(BasicJob.class);
     private String id;
     private Source source;
     private Sink sink;
@@ -37,20 +40,31 @@ public class BasicJob extends AbstractLifecycle implements Job {
     }
 
     @Override
-    public void execute() {
+    public void start() {
         Preconditions.checkNotNull(source, "Souce can not be null.");
         Preconditions.checkNotNull(sink, "Sink can not be null.");
         source.setChannel(channel);
         sink.setChannel(channel);
+        logger.info("Job({}) is running...", id);
         // 启动
         channel.start();
         source.start();
         sink.start();
-        // 等待结束
-        LifecycleUtils.waitFor(source);
-        LifecycleUtils.waitFor(sink);
-        // 结束，清理
-        channel.stop();
-        super.stop();
+        super.start();
+    }
+
+    @Override
+    public LifecycleState getState() {
+        if (state == LifecycleState.START) {
+            // 判断Source和Sink状态
+            if (source.getState() != LifecycleState.START && sink.getState() != LifecycleState.START) {
+                logger.info("Job({}) done; Source state:{}, Sink state:{}, Channel state:{}.", id, source.getState(),
+                        sink.getState(), channel.getState());
+                // 结束，清理
+                channel.stop();
+                stop();
+            }
+        }
+        return super.getState();
     }
 }

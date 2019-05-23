@@ -20,6 +20,9 @@ public class AppMain implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        long startTime = System.currentTimeMillis();
         jobManager.start();
+        System.out.println(System.currentTimeMillis() - startTime);
+        System.exit(0);
     }
 }
