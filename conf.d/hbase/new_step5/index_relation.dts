@@ -1,0 +1,31 @@
+{
+    "source":{
+        "sql":"select t.* from rkjk.index_relation t ",
+        "args":[]
+    },
+    "sink":{
+        "hbase":{
+            "table_name":"rkjk:index_relation_hbase",
+            "presplit_count":7,
+            "familys":[
+                {
+                    "family_name":"MAJOR",
+                    "block_size":"16384",
+                    "columns":[
+                        "YLJGDM","JZLSH"
+                      ]
+                }
+            ],
+            "default_family":{
+                "family_name":"MINOR",
+                "block_size":"65536"
+            },
+            "row_key":{
+                "pattern":"?_?",
+                "args":[
+                    "JZLSH","YLJGDM"
+                ]
+            }
+        }
+    }
+}

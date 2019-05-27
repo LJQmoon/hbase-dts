@@ -1,0 +1,31 @@
+{
+    "source":{
+        "sql":"select t.* from (select s.*,row_number() over(partition by JZLSH,YLJGDM,YZLB,YZID order by s.tbrq desc) as num from rkjk.zy_yzmxb_new s ) t where t.num = 1 ",
+        "args":[]
+    },
+    "sink":{
+        "hbase":{
+            "table_name":"rkjk:zy_yzmxb_hbase",
+            "familys":[
+                {
+                    "family_name":"MAJOR",
+                    "block_size":"16384",
+                    "presplit_count":7,
+                    "columns":[
+                        "YLJGDM","JZLSH","YZID","ZJHM","ZJLX","KH","KLX","YZLB","YYPCH","PCH","XZQH"
+                      ]
+                }
+            ],
+            "default_family":{
+                "family_name":"MINOR",
+                "block_size":"65536"
+            },
+            "row_key":{
+                "pattern":"?_?_?_?",
+                "args":[
+                    "JZLSH","YLJGDM","YZLB","YZID"
+                ]
+            }
+        }
+    }
+}

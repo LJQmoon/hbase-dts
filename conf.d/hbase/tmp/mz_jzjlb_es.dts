@@ -1,0 +1,36 @@
+{
+    "source":{
+        "sql":"select t.*,(CASE t.klxdm WHEN '4' THEN concat_ws(\"_\",\"0\",concat_ws(\"#\",t.yljgdm,t.khm)) WHEN '8' THEN concat_ws(\"_\",\"0\",concat_ws(\"#\",t.yljgdm,t.khm)) ELSE concat_ws(\"_\",\"0\",t.khm) END) as cardId from (select s.*,row_number() over(partition by YLJGDM,JZLSH order by s.tbrq desc) as num from (select a.yljgdm,a.jzlsh,a.jclsh,a.jtysqybz,a.qyjtysgh,a.qyjtysxm,a.grjbxxbsh,a.klxdm,a.khm,a.zjhm,a.zjlx,a.xm,a.nl,a.cfzbz,a.bxlx,a.jzlxdm,a.jzksdm,a.jzksmc,a.jzsj,a.zdysdm,a.zdysxm,a.jbzddm,a.jbzdmc,a.jbzddmlx,a.jbzdsm,a.zyzzdmzh,a.zs,a.tz,a.xbs,a.gms,a.jws,a.ycjzs,a.zyszms,a.tgjcjl,a.fzjcjl,a.clcs,a.lygcbz,a.ssy,a.szy,a.kfxt,a.chxt,a.tw,a.ml,a.xl,a.sfsj,a.ybje,a.zfje,a.yhje,a.ssje,a.zje,a.ybzhbz,a.mj,a.tbrq,a.xgbz,a.sjbz,a.jyzt,a.sczt,a.pch,a.yypch,a.jbzddmqz,a.jbzdmcqz,a.jbzddmxz,a.jbzdmcxz,a.hyyjs,b.jgmc,b.xzqh,b.yylx,b.jglb from (select * from rkjk.mz_jzjlb_new where JZSJ  <= from_unixtime(unix_timestamp(),'yyyy-MM-dd HH:mm:ss')) a left join rkjk.qs_sys_zcjg b on a.yljgdm = b.jgbm) s ) t where t.num = 1",
+        "args":[]
+    },
+    "sink":{
+        "elasticsearch":{
+            "hosts":[
+                {
+                    "hostname":"10.110.14.126",
+                    "port":8083
+                },{
+                    "hostname":"10.110.14.127",
+                    "port":8083
+                },{
+                    "hostname":"10.110.14.128",
+                    "port":8083
+                },{
+                    "hostname":"10.110.14.129",
+                    "port":8083
+                },{
+                    "hostname":"10.110.14.130",
+                    "port":8083
+                }
+            ],
+            "index":"gsww_mz_jzjlb",
+            "type":"mz",
+            "id":{
+                "pattern":"?_?",
+                "args":[
+                    "YLJGDM","JZLSH"
+                ]
+            }
+        }
+    }
+}

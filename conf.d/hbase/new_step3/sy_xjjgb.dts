@@ -1,0 +1,31 @@
+{
+    "source":{
+        "sql":"select t.* from (select s.*,row_number() over(partition by JYID,YLJGDM,XJJGID order by s.tbrq desc) as num from rkjk.sy_xjjgb_new s ) t where t.num = 1 ",
+        "args":[]
+    },
+    "sink":{
+        "hbase":{
+            "table_name":"rkjk:sy_xjjgb_hbase",
+            "familys":[
+                {
+                    "family_name":"MAJOR",
+                    "block_size":"16384",
+                    "presplit_count":7,
+                    "columns":[
+                        "YLJGDM","JYID","XJJGID","BGRQ","TBRQ","YYPCH","PCH","XZQH"
+                      ]
+                }
+            ],
+            "default_family":{
+                "family_name":"MINOR",
+                "block_size":"65536"
+            },
+            "row_key":{
+                "pattern":"?_?_?",
+                "args":[
+                    "JYID","YLJGDM","XJJGID"
+                ]
+            }
+        }
+    }
+}

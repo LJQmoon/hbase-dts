@@ -1,0 +1,37 @@
+{
+    "source":{
+        "sql":"select t.*,(CASE t.klx WHEN '4' THEN concat_ws(\"_\",\"0\",concat_ws(\"#\",t.yljgdm,t.kh)) WHEN '8' THEN concat_ws(\"_\",\"0\",concat_ws(\"#\",t.yljgdm,t.kh)) ELSE concat_ws(\"_\",\"0\",t.kh) END) as cardId from (select s.*,row_number() over(partition by JZLSH,YLJGDM order by s.tbrq desc) as num from (select a1.yljgdm,a1.jzlsh,a1.cisid,a1.bah,a1.jtysqybz,a1.qyjtysgh,a1.qyjtysxm,a1.grjbxxbsh,a1.kh,a1.klx,a1.zjhm,a1.zjlx,a1.hzxm,a1.jzlx,a1.rylydm,a1.jzksbm,a1.jzksmc,a1.cyksbm,a1.cyksmc,a1.rysj,a1.cysj,a1.bxlx,a1.zyzzdmzh,a1.zs,a1.xbs,a1.gms,a1.ycjzs,a1.jws,a1.zyszms,a1.tgjcjl,a1.fzjcjl,a1.clcs,a1.ssy,a1.szy,a1.tw,a1.ml,a1.xl,a1.mj,a1.tbrq,a1.xgbz,a1.jyzt,a1.sczt,a1.sjbz,a1.pch,a1.yypch,a1.hyyjs,a1.sss,a1.jbs,a1.crbs,a1.yfjzs,a1.sxs,b1.ryzdbm,b1.ryzdmc,c1.xzqh,c1.yylx,c1.jglb,(case when d1.yljgdm is null then 0 else 1 end) as sfcy
+               from (select * from rkjk.zy_jzjlb where RYSJ  <= from_unixtime(unix_timestamp(),'yyyy-MM-dd HH:mm:ss')) a1 left join (select t.* from (select s.*,row_number() over(partition by JZLSH,YLJGDM order by s.tbrq desc) as num from rkjk.zy_rydjb s ) t where t.num = 1) b1 on a1.yljgdm=b1.yljgdm and a1.jzlsh=b1.jzlsh left join rkjk.qs_sys_zcjg c1 on a1.yljgdm = c1.jgbm left join (select e1.yljgdm,e1.jzlsh from zyzyba_zyzybasy e1 union all select e2.yljgdm,e2.jzlsh from zybl_basyztb e2) d1 on a1.yljgdm=d1.yljgdm and a1.jzlsh=d1.jzlsh) s ) t where t.num = 1",
+        "args":[]
+    },
+    "sink":{
+        "elasticsearch":{
+            "hosts":[
+                {
+                    "hostname":"10.110.14.126",
+                    "port":8083
+                },{
+                    "hostname":"10.110.14.127",
+                    "port":8083
+                },{
+                    "hostname":"10.110.14.128",
+                    "port":8083
+                },{
+                    "hostname":"10.110.14.129",
+                    "port":8083
+                },{
+                    "hostname":"10.110.14.130",
+                    "port":8083
+                }
+            ],
+            "index":"gsww_zy_jzjlb",
+            "type":"zy",
+            "id":{
+                "pattern":"?_?",
+                "args":[
+                    "YLJGDM","JZLSH"
+                ]
+            }
+        }
+    }
+}
